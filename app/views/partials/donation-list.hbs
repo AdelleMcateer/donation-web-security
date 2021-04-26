@@ -1,0 +1,33 @@
+<div class="uk-margin uk-width-2xlarge uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
+  <table class="uk-table">
+    <caption>
+      Donations to Date
+    </caption>
+    <thead>
+      <th>Amount</th>
+      <th>Method donated</th>
+      <th>Donor</th>
+      <th>Candidate</th>
+    </thead>
+    <tbody class="uk-text-left">
+      {{#each donations}}
+        <tr>
+          <td>{{amount}}</td>
+          <td>{{method}}</td>
+          <td> {{donor.firstName}} {{donor.lastName}} </td>
+          <td>{{candidate.lastName}}, {{candidate.firstName}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <table class="uk-table">
+    <thead>
+      <th>Total</th>
+    </thead>
+    <tbody class="uk-text-left">
+      <tr>
+        <td> {{total}} </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
