@@ -17,10 +17,18 @@ if (result.error) {
   process.exit(1);
 }
 
+const fs = require('fs');
 const server = Hapi.server({
-  port: process.env.PORT || 4000,
-  routes: { cors: true },
+  port: 3443,
+  tls: {
+    key: fs.readFileSync('keys/private/webserver.key'),
+    cert: fs.readFileSync('keys/webserver.crt')
+  }
 });
+//const server = Hapi.server({
+  //port: process.env.PORT || 4000,
+  //routes: { cors: true },
+//});
 
 async function init() {
   await server.register(Inert);
