@@ -27,7 +27,7 @@ const Accounts = {
         // begin with upper case letter and then 2+ lower case letters
         //firstName: Joi.string().regex(/^[A-Z][a-z]{2,}$/),
 
-       // lastName: Joi.string().required(),
+        // lastName: Joi.string().required(),
         //begin with upper case letter, then any 2+ characters
         lastName: Joi.string().regex(/^[A-Z]/).min(3),
         email: Joi.string().email().required(),

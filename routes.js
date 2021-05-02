@@ -6,7 +6,9 @@ const Donations = require("./app/controllers/donations");
 module.exports = [
   { method: "GET", path: "/", config: Accounts.index },
   { method: "GET", path: "/signup", config: Accounts.showSignup },
+
   { method: "GET", path: "/login", config: Accounts.showLogin },
+
   { method: "GET", path: "/logout", config: Accounts.logout },
   { method: "POST", path: "/signup", config: Accounts.signup },
   { method: "POST", path: "/login", config: Accounts.login },
@@ -16,6 +18,15 @@ module.exports = [
   { method: "GET", path: "/home", config: Donations.home },
   { method: "POST", path: "/donate", config: Donations.donate },
   { method: "GET", path: "/report", config: Donations.report },
+
+  {
+    method: 'GET',
+    path: '/welcome/{user}',
+    handler: function (request, reply) {
+      return 'Welcome ' + request.params.user;
+    },
+    config: {auth: false}
+  },
 
   {
     method: "GET",

@@ -1,10 +1,15 @@
 "use strict";
 
+const os = require('os'); //Adding to implement Git oauth
+os.tmpDir = os.tmpdir;
+
 const Hapi = require("@hapi/hapi");
+const Bell = require('@hapi/bell'); //Added Bell component
 const Inert = require("@hapi/inert");
 const Vision = require("@hapi/vision");
 const Handlebars = require("handlebars");
-const Cookie = require("@hapi/cookie");
+const AuthCookie = require('@hapi/cookie'); //Added/Duplicate?
+//const Cookie = require("@hapi/cookie");
 const Joi = require("@hapi/joi");
 require("./app/models/db");
 const env = require("dotenv");
@@ -33,8 +38,13 @@ const server = Hapi.server({
 async function init() {
   await server.register(Inert);
   await server.register(Vision);
-  await server.register(Cookie);
+  //await server.register(Cookie);
+
+  // Register bell and hapi auth cookie with the server
+  await server.register([Bell, AuthCookie]);
+
   server.validator(require("@hapi/joi"));
+
   server.views({
     engines: {
       hbs: require("handlebars"),
@@ -46,18 +56,37 @@ async function init() {
     layout: true,
     isCached: false,
   });
-  server.auth.strategy("session", "cookie", {
+
+  //server.auth.strategy("session", "cookie", {
+  server.auth.strategy("cookie-auth", "cookie", {
     cookie: {
-      name: process.env.cookie_name,
-      password: process.env.cookie_password,
-      isSecure: false,
+      //name: process.env.cookie_name,
+      name: 'donation_auth',
+      password: 'password-should-be-32-characters',  // String used to encrypt cookie
+      //password: process.env.cookie_password,
+      isSecure: false,  // Should be 'true' in production software (requires HTTPS)
     },
     redirectTo: "/",
   });
-  server.auth.default("session");
+
+  var bellAuthOptions = {
+    provider: 'github',
+    password: 'github-encryption-password-secure', // String used to encrypt cookie
+    // used during authorisation steps only
+    clientId: 'Client Id',          // *** Replace with your app Client Id ****
+    clientSecret: 'Client Secret',  // *** Replace with your app Client Secret ***
+    isSecure: false        // Should be 'true' in production software (requires HTTPS)
+  };
+
+  server.auth.strategy('github-oauth', 'bell', bellAuthOptions);
+
+  server.auth.default('cookie-auth');
+
+  //server.auth.default("session");
   server.route(require("./routes"));
   server.route(require("./routes-api"));
   await server.start();
+  return server;
   console.log(`Server running at: ${server.info.uri}`);
 }
 
@@ -66,4 +95,9 @@ process.on("unhandledRejection", (err) => {
   process.exit(1);
 });
 
-init();
+init()
+.then((server) => console.log(`Server listening on ${server.info.uri}`))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
