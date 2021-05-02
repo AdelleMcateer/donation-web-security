@@ -22,19 +22,13 @@ const Accounts = {
     auth: false,
     validate: {
       payload: {
-        firstName: Joi.string().required(),
-
         // begin with upper case letter and then 2+ lower case letters
-        //firstName: Joi.string().regex(/^[A-Z][a-z]{2,}$/),
+        firstName: Joi.string().regex(/^[A-Z][a-z]{2,}$/).max(15),
 
-        // lastName: Joi.string().required(),
         //begin with upper case letter, then any 2+ characters
         lastName: Joi.string().regex(/^[A-Z]/).min(3),
         email: Joi.string().email().required(),
-
-        //email: Joi.string().email().required(),
         password: Joi.string().min(8)               // min 8 characters
-        //password: Joi.string().required(),
       },
       options: {
         abortEarly: false,
