@@ -4,6 +4,8 @@ const Boom = require("@hapi/boom");
 const Joi = require("@hapi/joi");
 const bcrypt = require("bcrypt");          // ADDED
 const saltRounds = 10;                     // ADDED
+const Crypto=require("crypto-js");         // ADDED
+const CryptoSecretKey = process.env.CRYPTO_SECRET_KEY;   // ADDED
 
 const Accounts = {
   index: {
@@ -55,8 +57,10 @@ const Accounts = {
         const hash = await bcrypt.hash(payload.password, saltRounds);    // ADDED
 
         const newUser = new User({
-          firstName: payload.firstName,
-          lastName: payload.lastName,
+          firstName: Crypto.AES.encrypt(payload.firstName, CryptoSecretKey),
+          lastName: Crypto.AES.encrypt(payload.lastName, CryptoSecretKey),
+          //firstName: payload.firstName,
+          //lastName: payload.lastName,
           email: payload.email,
           password: hash                             // EDITED
         });
@@ -154,8 +158,10 @@ const Accounts = {
         const userEdit = request.payload;
         const id = request.auth.credentials.id;
         const user = await User.findById(id);
-        user.firstName = userEdit.firstName;
-        user.lastName = userEdit.lastName;
+        user.firstName = Crypto.AES.encrypt(userEdit.firstName, CryptoSecretKey);
+        user.lastName = Crypto.AES.encrypt(userEdit.lastName, CryptoSecretKey);
+        //user.firstName = userEdit.firstName;
+        //user.lastName = userEdit.lastName;
         user.email = userEdit.email;
         //user.password = userEdit.password;          // EXERCISE -- change this to use bcrypt
         const hash = await bcrypt.hash(userEdit.password, saltRounds);
