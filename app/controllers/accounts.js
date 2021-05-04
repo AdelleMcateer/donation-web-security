@@ -31,13 +31,13 @@ const Accounts = {
     auth: false,
     validate: {
       payload: {
-        // begin with upper case letter and then 2+ lower case letters
-        firstName: Joi.string().regex(/^[A-Z][a-z]{2,}$/).max(15),
+        // begin with upper case letter and then 2+ alphanumeric lower case letters
+        firstName: Joi.string().alphanum().regex(/^[A-Z]/).min(3).max(15).required(),
 
-        //begin with upper case letter, then any 2+ characters
-        lastName: Joi.string().regex(/^[A-Z]/).min(3),
-        email: Joi.string().email().required(),
-        password: Joi.string().min(8)               // min 8 characters
+        //begin with upper case letter, then any 2+ alphanumeric characters
+        lastName: Joi.string().alphanum().regex(/[A-Z]/).min(3).max(15).required(),
+        email: Joi.string().max(30).email().required(),
+        password: Joi.string().required().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,30}$/),
       },
       options: {
         abortEarly: false,
