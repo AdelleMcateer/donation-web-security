@@ -73,8 +73,8 @@ async function init() {
     provider: 'github',
     password: 'github-encryption-password-secure', // String used to encrypt cookie
     // used during authorisation steps only
-    clientId: 'Client Id',          // *** Replace with your app Client Id ****
-    clientSecret: 'Client Secret',  // *** Replace with your app Client Secret ***
+    clientId: '49687bb3bcffc48d4c76',          // *** Replace with your app Client Id ****
+    clientSecret: 'ea4e2143609b8e0324880e9c6412a0c0ec18b9bc',  // *** Replace with your app Client Secret ***
     isSecure: false        // Should be 'true' in production software (requires HTTPS)
   };
 

@@ -11,6 +11,13 @@ const Accounts = {
   index: {
     auth: false,
     handler: function (request, h) {
+      if (request.auth.isAuthenticated) {
+        request.cookieAuth.set(request.auth.credentials);
+        return ('Hello ' + request.auth.credentials.profile.displayName);
+      }
+      else {
+      return('Not logged in...');
+    }
       return h.view("main", { title: "Welcome to Donations" });
     },
   },
@@ -79,7 +86,7 @@ const Accounts = {
     },
   },
   login: {
-    auth: false,
+    auth: 'github-oauth',
     validate: {
       payload: {
         email: Joi.string().email().required(),
@@ -99,6 +106,7 @@ const Accounts = {
       },
     },
     handler: async function (request, h) {
+
       const { email, password } = request.payload;
       try {
         let user = await User.findByEmail(email);
