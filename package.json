@@ -25,7 +25,8 @@
     "handlebars": "^4.7.6",
     "lodash": "^4.17.21",
     "mais-mongoose-seeder": "^1.0.7",
-    "mongoose": "^5.11.15"
+    "mongoose": "^5.11.15",
+    "sanitize-html": "^2.3.3"
   },
   "devDependencies": {
     "axios": "^0.21.1",
